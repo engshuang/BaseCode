@@ -10,22 +10,18 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import com.yes.JsonUtil.JsonUtil;
+import com.yes.JsonUtil.JsonUtil.SipFile;
+
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
-/**
- * Description：用此类将图片转换为字符串，以便将图片封装为JSON进行传输
- * 
- * @author 河伯
- * @Date 2014-05-27
- * @version 1.0
- * */
 public class ImgHelper {
 
 	private final static int FILE_SIZE = 1024;
 
 	/**
-	 * TODO:将byte数组以Base64方式编码为字符串
+	 * 将byte数组以Base64方式编码为字符串
 	 * 
 	 * @param bytes
 	 *            待编码的byte数组
@@ -36,7 +32,7 @@ public class ImgHelper {
 	}
 
 	/**
-	 * TODO:将以Base64方式编码的字符串解码为byte数组
+	 * 将以Base64方式编码的字符串解码为byte数组
 	 * 
 	 * @param encodeStr
 	 *            待解码的字符串
@@ -51,7 +47,7 @@ public class ImgHelper {
 	}
 
 	/**
-	 * TODO:将两个byte数组连接起来后，返回连接后的Byte数组
+	 * 将两个byte数组连接起来后，返回连接后的Byte数组
 	 * 
 	 * @param front
 	 *            拼接后在前面的数组
@@ -67,7 +63,7 @@ public class ImgHelper {
 	}
 
 	/**
-	 * TODO:将图片以Base64方式编码为字符串
+	 * 将图片以Base64方式编码为字符串
 	 * 
 	 * @param imgUrl
 	 *            图片的绝对路径（例如：D:\\jsontest\\abc.jpg）
@@ -83,12 +79,14 @@ public class ImgHelper {
 	}
 
 	// 图片上传
-	public static void upLoadFile(byte[] image, File target) {
+	public static String upLoadFile(byte[] image) {
+		String pathName = "D:\\\\2001.jpg";
+		File targetFile = new File(pathName);
 		InputStream in = new BufferedInputStream(
 				new ByteArrayInputStream(image), FILE_SIZE);
 		OutputStream out = null;
 		try {
-			out = new BufferedOutputStream(new FileOutputStream(target),
+			out = new BufferedOutputStream(new FileOutputStream(targetFile),
 					FILE_SIZE);
 			while (in.read(image) > 0) {
 				out.write(image);
@@ -105,7 +103,7 @@ public class ImgHelper {
 			} catch (IOException ex) {
 			}
 		}
-
+		return pathName; 
 	}
 
 	/**
@@ -115,8 +113,17 @@ public class ImgHelper {
 		String str;
 		try {
 			str = encodeImage("D:\\\\2000.jpg");
-			File targetFile = new File("D:\\\\2001.jpg");
-			upLoadFile(decode(str), targetFile);
+			SipFile file1 = new SipFile();
+			file1.setName("test");
+			file1.setPath(str);
+//			System.out.println(JsonUtil.toJson(file1, true));
+
+			String json = JsonUtil.toJson(file1, false);
+			SipFile file = JsonUtil.jsonToObject(json, SipFile.class);
+//			System.out.println(file.getName());
+			System.out.println(json);
+//			System.out.println(str);
+//			upLoadFile(decode(file.getPath()));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
