@@ -21,24 +21,11 @@ public class AwardResultServlet extends HttpServlet {
 	@Override
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
-		String username = request.getParameter("username").trim();
-		String password = request.getParameter("password");
-		
-		try {
-		    /** post方式 */
-		    HttpClient client = new HttpClient();
-		    PostMethod postMethod = new PostMethod(
-		            "http://localhost:9080/SOA/services/UaoService/downloadImg");
-		    // 参数设置
-		    postMethod.setParameter("id", password);
-		    // 执行postMethod
-		    client.getParams().setParameter(
-		            HttpMethodParams.HTTP_CONTENT_CHARSET, "utf-8");
-		    // 执行并返回状态
-		    int status = client.executeMethod(postMethod);
-		    String getUrl = postMethod.getResponseBodyAsString();
-		} catch (Exception e) {
-		    e.printStackTrace();
-		}
+		String username = request.getParameter("username").trim();   
+        String password = request.getParameter("password");   
+        if ("yuan".equals(username) && "123456".equals(password))   
+            response.sendRedirect("welcome.jsp");   
+        else  
+            response.sendRedirect("error.jsp");   
 	}
 }
